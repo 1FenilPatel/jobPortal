@@ -9,8 +9,13 @@ A full-stack MERN (MongoDB, Express, React, Node.js) Job Portal web application.
 ## 🚀 Features
 - User authentication (signup/login)
 - Job posting & applications
-- Admin panel (optional)
+- Admin panel
 - RESTful APIs
+
+## 👤 Users
+- Actuall Users
+- Recruiters/Admin(Pannle)
+- SuperUser/SuperAdnin
 
 ## 🔧 Tech Stack
 - MongoDB
