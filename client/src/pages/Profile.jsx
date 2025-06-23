@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { USER_API_END_POINT } from "@/components/Apis";
 import { setUser } from "@/Redux/authSlice";
+import axiosInstance from "@/Utils/axiosInstance";
 
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
@@ -34,9 +35,9 @@ const Profile = () => {
     if(user?.role === "provider" && token){
       const fetchUser = async()=>{
         try {
-          const res = await axios.get(`${USER_API_END_POINT}/getuser`,{
+          const res = await axiosInstance.get(`${USER_API_END_POINT}/getuser`,{
             headers:{Authorization: `Bearer ${token}`},
-            withCredentials:true
+            // withCredentials:true
           });
           if(res.data.success){
               dispatch(setUser(res.data.user));

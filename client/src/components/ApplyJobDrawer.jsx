@@ -17,6 +17,7 @@ import { useParams } from "react-router-dom";
 import { setIsApplied, setSingleJob } from "@/Redux/jobSlice";
 import { toast } from "sonner";
 import { store } from "@/Redux/store";
+import axiosInstance from "@/Utils/axiosInstance";
 
 const ApplyJobDrawer = () => {
   const dispatch = useDispatch();
@@ -48,9 +49,9 @@ const ApplyJobDrawer = () => {
     }
 
     try {
-      const res = await axios.get(
+      const res = await axiosInstance.get(
         `${APPLICATION_API_END_POINT}/apply/${jobId}`,
-        { withCredentials: true }
+        // { withCredentials: true }
       );
 
       if (res.data.success) {

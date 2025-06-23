@@ -13,6 +13,7 @@ import { setLoading } from "@/Redux/authSlice";
 import { COMPANY_API_END_POINT } from "@/components/Apis";
 import { setSingleCompany } from "@/Redux/companySlice";
 import { store } from "@/Redux/store";
+import axiosInstance from "@/Utils/axiosInstance";
 
 const CompanySetUp = () => {
   const navigate = useNavigate();
@@ -59,7 +60,7 @@ const CompanySetUp = () => {
 
     try {
         dispatch(setLoading(true));
-        const res = await axios.put(`${COMPANY_API_END_POINT}/update/${params.id}`,formdata,{
+        const res = await axiosInstance.put(`${COMPANY_API_END_POINT}/update/${params.id}`,formdata,{
             headers:{
                 'Content-Type':'multipart/form-data'
             },withCredentials:true,

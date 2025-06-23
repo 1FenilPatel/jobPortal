@@ -14,6 +14,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { store } from "@/Redux/store";
+import axiosInstance from "@/Utils/axiosInstance";
 import axios from "axios";
 import { MoreHorizontal } from "lucide-react";
 import React, { useState } from "react";
@@ -30,16 +31,16 @@ const ApplicantsTable = () => {
     try {
       setDisabledButtons((prev) => ({ ...prev, [id]: true }));
 
-      const res = await axios.post(
+      const res = await axiosInstance.post(
         `${APPLICATION_API_END_POINT}/status/${id}/update`,
         { status },
-        { withCredentials: true }
+        // { withCredentials: true }
       );
 
       if (res.data.success) {
         toast.success(res.data.message);
 
-        await axios.post(
+        await axiosInstance.post(
           `${APPLICATION_API_END_POINT}/send-sms`,
           {
             phoneNumber,
@@ -53,7 +54,7 @@ const ApplicantsTable = () => {
               Authorization: `Bearer ${token}`,
             },
           },
-          { withCredentials: true }
+          // { withCredentials: true }
         );
         console.log("SMS Notification Sent");
       }

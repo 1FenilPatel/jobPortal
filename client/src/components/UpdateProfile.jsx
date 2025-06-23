@@ -16,36 +16,37 @@ import axios from "axios";
 import { USER_API_END_POINT } from "./Apis";
 import { toast } from "sonner";
 import { setLoading, setProfilePhoto, setUser } from "@/Redux/authSlice";
+import axiosInstance from "@/Utils/axiosInstance";
 
-const UpdateProfile = ({open,setOpen}) => {
-  const {user,loading} = useSelector(store=>store.auth);
-  
+const UpdateProfile = ({ open, setOpen }) => {
+  const { user, loading } = useSelector((store) => store.auth);
+
   const dispatch = useDispatch();
 
-  const [input,setInput] = useState({
-    fullname:user?.fullname,
-    email:user?.email,
+  const [input, setInput] = useState({
+    fullname: user?.fullname,
+    email: user?.email,
     phoneNumber: user?.phoneNumber,
     bio: user?.profile?.bio,
     skills: user?.profile.skills?.map((skills) => skills),
     location: user?.location,
-    profilePhoto:null,
-    gstno:user?.gstno,
+    profilePhoto: null,
+    gstno: user?.gstno,
     file: user?.profile?.resume,
-  })
+  });
 
   const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
-}
+  };
 
-const fileChangeHandler = (e) => {
-  const { name, files } = e.target;
-  setInput({ ...input, [name]: files[0] });
-};
+  const fileChangeHandler = (e) => {
+    const { name, files } = e.target;
+    setInput({ ...input, [name]: files[0] });
+  };
 
   const submitHandler = async (e) => {
     e.preventDefault();
-  
+
     const formData = new FormData();
     formData.append("fullname", input.fullname);
     formData.append("email", input.email);
@@ -53,29 +54,35 @@ const fileChangeHandler = (e) => {
     formData.append("bio", input.bio);
     formData.append("skills", input.skills);
     formData.append("location", input.location);
-    formData.append("gstno",input.gstno);
-  
+    formData.append("gstno", input.gstno);
+
     if (input.profilePhoto) {
       formData.append("profilePhoto", input.profilePhoto);
     }
     if (input.resume) {
       formData.append("resume", input.resume);
     }
-  
+
     try {
       dispatch(setLoading(true));
-  
-      const res = await axios.post(`${USER_API_END_POINT}/profile/update`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-        withCredentials: true,
-      });
-  
+
+      const res = await axiosInstance.post(
+        `${USER_API_END_POINT}/profile/update`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
       if (res.data.success) {
         toast.success(res.data.message);
-        dispatch(setUser(res.data.user)); 
-  
+        dispatch(setUser(res.data.user));
+
         if (res.data.user?.profile?.profilePhoto) {
-          dispatch(setProfilePhoto(res.data.user.profile.profilePhoto)); 
+          dispatch(setProfilePhoto(res.data.user.profile.profilePhoto));
         }
       }
     } catch (error) {
@@ -83,10 +90,10 @@ const fileChangeHandler = (e) => {
     } finally {
       dispatch(setLoading(false));
     }
-  
+
     setOpen(false);
   };
-  
+
   return (
     <div>
       <Dialog open={open}>
@@ -95,11 +102,13 @@ const fileChangeHandler = (e) => {
           className="sm:max-w-[725px] sm:max-h-[80vh] bg-white outline-none border-none text-black overflow-y-auto  hide-scrollbar"
         >
           <DialogHeader>
-            <DialogTitle className="text-2xl font-bold">Update Personal Details</DialogTitle>
+            <DialogTitle className="text-2xl font-bold">
+              Update Personal Details
+            </DialogTitle>
           </DialogHeader>
           <form action="" onSubmit={submitHandler}>
             <div className="grid gap-4 py-4">
-            <div className="flex flex-col gap-2 justify-center">
+              <div className="flex flex-col gap-2 justify-center">
                 <Label htmlFor="profilePhoto" className="text-lg">
                   Profile Photo
                 </Label>
@@ -164,73 +173,80 @@ const fileChangeHandler = (e) => {
                   className="border border-gray-400 text-black rounded-lg outline-none p-2"
                 />
               </div>
-             {
-              user?.role === "provider" && (
-                 <div className="flex flex-col gap-2 justify-center">
-                <Label htmlFor="location" className="text-lg">
-                  GST No
-                </Label>
-                <input
-                  type="text"
-                  id="gstno"
-                  name="gstno"
-                  value={input.gstno}
-                  onChange={changeEventHandler}
-                  className="border border-gray-400 text-black rounded-lg outline-none p-2"
-                />
-              </div>
-              )
-             }
-              {
-                user?.role === "user" && (
-                  <div>
-                    <div className="flex flex-col gap-2 justify-center">
-                <Label htmlFor="bio" className="text-lg">
-                  Bio
-                </Label>
-                <input
-                  type="text"
-                  id="bio"
-                  name="bio"
-                  value={input.bio}
-                  onChange={changeEventHandler}
-                  className=" border border-gray-400 text-black rounded-lg outline-none p-2"
-                />
-              </div>
-              <div className="flex flex-col gap-2 justify-center">
-                <Label htmlFor="skills" className="text-lg">
-                  Skills
-                </Label>
-                <input
-                  type="text"
-                  id="skills"
-                  name="skills"
-                  value={input.skills}
-                  onChange={changeEventHandler}
-                  className=" border border-gray-400 text-black rounded-lg outline-none p-2"
-                />
-              </div>
-              <div className="flex flex-col gap-2 justify-center">
-                <Label htmlFor="resume" className="text-lg">
-                  Resume
-                </Label>
-                <input
-                  type="file"
-                  id="file"
-                  name="resume"
-                  onChange={fileChangeHandler}
-                  accept="application/pdf"
-                  className="text-black rounded-lg outline-none p-2"
-                />
-              </div>
+              {user?.role === "provider" && (
+                <div className="flex flex-col gap-2 justify-center">
+                  <Label htmlFor="location" className="text-lg">
+                    GST No
+                  </Label>
+                  <input
+                    type="text"
+                    id="gstno"
+                    name="gstno"
+                    value={input.gstno}
+                    onChange={changeEventHandler}
+                    className="border border-gray-400 text-black rounded-lg outline-none p-2"
+                  />
+                </div>
+              )}
+              {user?.role === "user" && (
+                <div>
+                  <div className="flex flex-col gap-2 justify-center">
+                    <Label htmlFor="bio" className="text-lg">
+                      Bio
+                    </Label>
+                    <input
+                      type="text"
+                      id="bio"
+                      name="bio"
+                      value={input.bio}
+                      onChange={changeEventHandler}
+                      className=" border border-gray-400 text-black rounded-lg outline-none p-2"
+                    />
                   </div>
-                )
-              }
+                  <div className="flex flex-col gap-2 justify-center">
+                    <Label htmlFor="skills" className="text-lg">
+                      Skills
+                    </Label>
+                    <input
+                      type="text"
+                      id="skills"
+                      name="skills"
+                      value={input.skills}
+                      onChange={changeEventHandler}
+                      className=" border border-gray-400 text-black rounded-lg outline-none p-2"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-2 justify-center">
+                    <Label htmlFor="resume" className="text-lg">
+                      Resume
+                    </Label>
+                    <input
+                      type="file"
+                      id="file"
+                      name="resume"
+                      onChange={fileChangeHandler}
+                      accept="application/pdf"
+                      className="text-black rounded-lg outline-none p-2"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
             <DialogFooter>
-            {
-                loading ? <Button className="w-full  my-4"> <Loader2 className='mr-2 text-white bg-blue-900 hover:bg-blue-900 h-4 w-4 animate-spin' /> Please wait </Button> : <Button type="submit"  className="w-full text-white bg-blue-900 hover:bg-blue-900 my-4">Save Changes</Button>
-            }
+              {loading ? (
+                <Button className="w-full  my-4">
+                  {" "}
+                  <Loader2 className="mr-2 text-white bg-blue-900 hover:bg-blue-900 h-4 w-4 animate-spin" />{" "}
+                  Please wait{" "}
+                </Button>
+              ) : (
+                <Button
+                  type="submit"
+                  className="w-full text-white bg-blue-900 hover:bg-blue-900 my-4"
+                >
+                  Save Changes
+                </Button>
+              )}
             </DialogFooter>
           </form>
         </DialogContent>

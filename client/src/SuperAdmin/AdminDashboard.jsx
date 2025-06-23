@@ -38,7 +38,7 @@ const AdminDashboard = () => {
   const fetchProvider = async () => {
     try {
       const res = await axios.get(`${ADMIN_API_END_POINT}/getProvider`, {
-        withCredentials: true,
+        // withCredentials: true,
       });
       if (res.data.success) {
         dispatch(setProvider(res.data.provider));
@@ -54,7 +54,7 @@ const AdminDashboard = () => {
   const fetchUser = async () => {
     try {
       const response = await axios.get(`${ADMIN_API_END_POINT}/getAlluser`, {
-        withCredentials: true,
+        // withCredentials: true,
       });
       if (response.data.success) {
         setUsers(response.data.user);
@@ -70,7 +70,7 @@ const AdminDashboard = () => {
       const res = await axios.put(
         `${ADMIN_API_END_POINT}/approveRequest`,
         { providerId, isApproved },
-        { withCredentials: true }
+        // { withCredentials: true }
       );
       if (res.data.success) {
         fetchProvider();
@@ -82,7 +82,9 @@ const AdminDashboard = () => {
   
   const handleDelete = async(userId)=>{
     try {
-      const res = await axios.delete(`${ADMIN_API_END_POINT}/removeUser/${userId}`,{withCredentials:true});
+      const res = await axios.delete(`${ADMIN_API_END_POINT}/removeUser/${userId}`,
+        // {withCredentials:true}
+      );
       if(res.data.success){
         toast.success(res.data.message);
         
@@ -133,25 +135,6 @@ const AdminDashboard = () => {
               <h2 className="text-xl text-black font-bold mb-4">
                 Pending Provider Requests
               </h2>
-              {/* <div className="space-y-4">
-                {dummyProviders.map((provider) => (
-                  <div
-                    key={provider._id}
-                    className="bg-white shadow-md p-4 rounded-lg flex justify-between items-center"
-                  >
-                    <div className="text-black">
-                      <h3 className="text-lg font-semibold">{provider.fullname}</h3>
-                      <p>Email: {provider.email}</p>
-                      <p>Phone: {provider.phone}</p>
-                      <p>GST: {provider.gstno}</p>
-                      <p>Location: {provider.location}</p>
-                    </div>
-                    <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">
-                      Approve
-                    </button>
-                  </div>
-                ))}
-              </div> */}
               {provider?.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {provider.map((item) => (

@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/select";
 import { setLoading } from "@/Redux/authSlice";
 import { store } from "@/Redux/store";
+import axiosInstance from "@/Utils/axiosInstance";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
 import React, { useState } from "react";
@@ -53,11 +54,11 @@ const CreateJob = () => {
     e.preventDefault();
     try {
       dispatch(setLoading(true));
-      const res = await axios.post(`${JOB_API_END_POINT}/postJob`, input, {
+      const res = await axiosInstance.post(`${JOB_API_END_POINT}/postJob`, input, {
         headers: {
           "Content-Type": "application/json",
         },
-        withCredentials: true,
+        // withCredentials: true,
       });
       if (res.data.success) {
         toast.success(res.data.message);

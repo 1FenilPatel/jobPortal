@@ -2,99 +2,90 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { MdAccountCircle } from "react-icons/md";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ADMIN_API_END_POINT, USER_API_END_POINT } from "@/components/Apis";
 import { toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading, setUser } from "@/Redux/authSlice";
-import { store } from "@/Redux/store";
 import { Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
+import axiosInstance from "@/Utils/axiosInstance";
 
 const LoginPage = () => {
   const { user, loading, isAdmin } = useSelector((store) => store.auth);
   const [input, setInput] = useState({
     email: "",
     password: "",
-    role:""
+    role: ""
   });
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-
   const changeEventHandler = (e) => {
-    const {name,value} = e.target;
-    if(name === "email" && value.toLowerCase() === "fenil@yahoo.com"){
-        setInput({...input,[name]:value,role:"admin"});
-    }else{
-      setInput({...input,[name]:value});
+    const { name, value } = e.target;
+    if (name === "email" && value.toLowerCase() === "fenil@yahoo.com") {
+      setInput({ ...input, [name]: value, role: "admin" });
+    } else {
+      setInput({ ...input, [name]: value });
     }
   };
 
   const handleSubmitChange = async (e) => {
     e.preventDefault();
 
-
     try {
       dispatch(setLoading(true));
-      if(input.role === "admin"){
-        const res = await axios.post(`${ADMIN_API_END_POINT}/admin-login`,{
-          email:input.email,
-          password:input.password
-        },{headers:{'Content-Type':'application/json'},
-          withCredentials:true
-      });
 
-      //    /admin/companies
-      toast.success(res.data.message);
-      dispatch(setUser(res.data.admin));
-      localStorage.setItem("token",res.data.token);
-      localStorage.setItem("role","admin");
-      navigate("/superadmin-dashboard");
-      return;
+      // Admin login
+      if (input.role === "admin") {
+        const res = await axiosInstance.post(`${ADMIN_API_END_POINT}/admin-login`, {
+          email: input.email,
+          password: input.password
+        }, {
+          headers: { 'Content-Type': 'application/json' }
+        });
+
+        toast.success(res.data.message);
+        dispatch(setUser(res.data.admin));
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("role", "admin");
+        navigate("/superadmin-dashboard");
+        return;
       }
 
-      if(!input.role){
+      // Role not selected
+      if (!input.role) {
         toast.error("Please select role");
         return;
       }
 
-      const res = await axios.post(`${USER_API_END_POINT}/login`, input, {
+      // User/Provider login
+      const res = await axiosInstance.post(`${USER_API_END_POINT}/login`, input, {
         headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
+          "Content-Type": "application/json"
+        }
       });
 
       if (res.data.success) {
         toast.success(res.data.message);
         dispatch(setUser(res.data.newUser));
         localStorage.setItem("token", res.data.token);
-        localStorage.setItem("role",res.data.newUser.role);
+        localStorage.setItem("role", res.data.newUser.role);
         navigate("/");
-        
       }
     } catch (error) {
       console.error("Login Error:", error);
-      toast.error(error?.response?.data?.message);
+      toast.error(error?.response?.data?.message || "Login failed");
     } finally {
       dispatch(setLoading(false));
     }
   };
 
-  // useEffect(() => {
-  //   if (isAdmin) {
-  //     navigate("/admin/companies");
-  //   } else if (user) {
-  //     navigate("/");
-  //   }
-  // }, [user, navigate, isAdmin]);
-
   return (
-    <div className="mt-5 flex items-center justify-center bg-gradient-to-br  via-blue-50 to-blue-100 px-4">
+    <div className="mt-5 flex items-center justify-center bg-gradient-to-br via-blue-50 to-blue-100 px-4">
       <motion.form
         onSubmit={handleSubmitChange}
         initial={{ y: 40, opacity: 0 }}
@@ -132,37 +123,36 @@ const LoginPage = () => {
           />
         </div>
 
-        {
-          input.email !== "fenil@yahoo.com" && (
-                 <div className="mb-2">
-                  <Label className="text-black font-semibold">Select Role</Label>
-                  <div className="flex gap-4 mt-2">
-                    <label className="flex items-center gap-1 text-sm text-gray-800">
-                      <input
-                        type="radio"
-                        name="role"
-                        value="user"
-                        checked={input.role === "user"}
-                        onChange={changeEventHandler}
-                        required
-                      />
-                      User
-                    </label>
-                    <label className="flex items-center gap-1 text-sm text-gray-800">
-                      <input
-                        type="radio"
-                        name="role"
-                        value="provider"
-                        checked={input.role === "provider"}
-                        onChange={changeEventHandler}
-                        required
-                      />
-                      Service Provider
-                    </label>
-                  </div>
-                </div>
-          )}
-    
+        {input.email !== "fenil@yahoo.com" && (
+          <div className="mb-2">
+            <Label className="text-black font-semibold">Select Role</Label>
+            <div className="flex gap-4 mt-2">
+              <label className="flex items-center gap-1 text-sm text-gray-800">
+                <input
+                  type="radio"
+                  name="role"
+                  value="user"
+                  checked={input.role === "user"}
+                  onChange={changeEventHandler}
+                  required
+                />
+                User
+              </label>
+              <label className="flex items-center gap-1 text-sm text-gray-800">
+                <input
+                  type="radio"
+                  name="role"
+                  value="provider"
+                  checked={input.role === "provider"}
+                  onChange={changeEventHandler}
+                  required
+                />
+                Service Provider
+              </label>
+            </div>
+          </div>
+        )}
+
         <Button
           type="submit"
           className="w-full bg-blue-600 hover:bg-blue-700 transition-colors duration-200 text-white font-semibold py-2 rounded-xl"

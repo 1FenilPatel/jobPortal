@@ -13,6 +13,7 @@ import { clearUser } from "@/Redux/authSlice";
 import { persistStore } from "redux-persist";
 import { motion } from "framer-motion";
 import { clearSavedJobs } from "@/Redux/savedJobSlice";
+import axiosInstance from "@/Utils/axiosInstance";
 
 const Header = () => {
   const { user, isAdmin, MyprofilePhoto } = useSelector((store) => store.auth);
@@ -27,8 +28,8 @@ const Header = () => {
 
   const handleLogout = async () => {
     try {
-      const res = await axios.get(`${USER_API_END_POINT}/logout`, {
-        withCredentials: true,
+      const res = await axiosInstance.get(`${USER_API_END_POINT}/logout`, {
+        // withCredentials: true,
       });
       if (res.data.success) {
         dispatch(clearUser());

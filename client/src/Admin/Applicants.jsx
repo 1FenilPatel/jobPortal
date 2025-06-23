@@ -8,6 +8,7 @@ import { store } from "@/Redux/store";
 import axios from "axios";
 import { APPLICATION_API_END_POINT } from "@/components/Apis";
 import { setAllApplicants } from "@/Redux/applicationSlice";
+import axiosInstance from "@/Utils/axiosInstance";
 
 const Applicants = () => {
   const navigate = useNavigate();
@@ -18,7 +19,9 @@ const Applicants = () => {
   useEffect(()=>{
     const fetchAllApplicants = async()=>{
       try {
-        const res = await axios.get(`${APPLICATION_API_END_POINT}/${params.id}/getApplicants`,{withCredentials:true});
+        const res = await axiosInstance.get(`${APPLICATION_API_END_POINT}/${params.id}/getApplicants`
+          // ,{withCredentials:true}
+        );
         dispatch(setAllApplicants(res.data.job));
       } catch (error) {
         console.log(error);

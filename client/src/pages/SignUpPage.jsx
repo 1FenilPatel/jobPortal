@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
+import axiosInstance from "@/Utils/axiosInstance";
 
 const SignUpPage = () => {
   const [input, setInput] = useState({
@@ -66,9 +67,9 @@ const SignUpPage = () => {
 
     try {
       dispatch(setLoading(true));
-      const res = await axios.post(`${USER_API_END_POINT}/register`, formData, {
+      const res = await axiosInstance.post(`${USER_API_END_POINT}/register`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
-        withCredentials: true,
+        // withCredentials: true,
       });
 
       if (res.data.success) {
