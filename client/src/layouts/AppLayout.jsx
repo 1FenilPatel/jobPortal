@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
-import React, { useEffect } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import React from "react";
+import { Outlet } from "react-router-dom";
 import {
   FaFacebookF,
   FaTwitter,
@@ -10,70 +10,67 @@ import {
 
 const AppLayout = () => {
   return (
-    <div>
-      <div className="grid-background"></div>
-      <main className="min-h-screen pr-20 pl-20">
+    <div className="relative">
+      <div className="grid-background absolute inset-0 -z-10"></div>
+
+      {/* Main Content Area */}
+      <main className="min-h-screen px-4 sm:px-8 md:px-16 lg:px-20">
         <Header />
         <Outlet />
       </main>
 
-      <footer className="relative bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white py-12 mt-16">
-        <div className="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between">
+      {/* Footer */}
+      <footer className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white py-10 mt-16 px-4">
+        <div className="max-w-screen-xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           {/* Left Section */}
-          <div className="text-center md:text-left mb-6 md:mb-0">
-            <h2 className="text-3xl font-bold tracking-wide">Job Finder</h2>
-            <p className="text-gray-300 mt-2 max-w-xs">
+          <div className="text-center md:text-left">
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-wide">Job Finder</h2>
+            <p className="text-gray-300 mt-2 max-w-xs mx-auto md:mx-0 text-sm sm:text-base">
               Your gateway to career success.
             </p>
           </div>
 
           {/* Navigation Links */}
-          <div className="flex flex-wrap justify-center md:justify-start gap-6 text-gray-300 font-medium text-sm">
-            <a
-              href="/"
-              className="hover:text-blue-400 transition-all duration-300"
-            >
+          <div className="flex flex-wrap justify-center gap-4 text-gray-300 font-medium text-sm">
+            <a href="/" className="hover:text-blue-400 transition-all duration-300">
               Home
             </a>
-            <a
-              href="/jobs"
-              className="hover:text-blue-400 transition-all duration-300"
-            >
+            <a href="/jobs" className="hover:text-blue-400 transition-all duration-300">
               Jobs
             </a>
           </div>
 
           {/* Social Media Icons */}
-          <div className="flex gap-5 mt-6 md:mt-0">
+          <div className="flex gap-4 justify-center">
             <a
               href="#"
-              className="p-3 rounded-full bg-white bg-opacity-20 hover:bg-opacity-40 transition duration-300"
+              className="p-2 rounded-full bg-white bg-opacity-20 hover:bg-opacity-40 transition duration-300"
             >
-              <FaFacebookF className="text-xl" />
+              <FaFacebookF className="text-lg sm:text-xl" />
             </a>
             <a
               href="#"
-              className="p-3 rounded-full bg-white bg-opacity-20 hover:bg-opacity-40 transition duration-300"
+              className="p-2 rounded-full bg-white bg-opacity-20 hover:bg-opacity-40 transition duration-300"
             >
-              <FaTwitter className="text-xl" />
+              <FaTwitter className="text-lg sm:text-xl" />
             </a>
             <a
               href="#"
-              className="p-3 rounded-full bg-white bg-opacity-20 hover:bg-opacity-40 transition duration-300"
+              className="p-2 rounded-full bg-white bg-opacity-20 hover:bg-opacity-40 transition duration-300"
             >
-              <FaLinkedinIn className="text-xl" />
+              <FaLinkedinIn className="text-lg sm:text-xl" />
             </a>
             <a
               href="#"
-              className="p-3 rounded-full bg-white bg-opacity-20 hover:bg-opacity-40 transition duration-300"
+              className="p-2 rounded-full bg-white bg-opacity-20 hover:bg-opacity-40 transition duration-300"
             >
-              <FaInstagram className="text-xl" />
+              <FaInstagram className="text-lg sm:text-xl" />
             </a>
           </div>
         </div>
 
         {/* Bottom Section */}
-        <div className="text-center text-gray-400 text-sm mt-8">
+        <div className="text-center text-gray-400 text-xs sm:text-sm mt-8">
           <p>© {new Date().getFullYear()} Job Finder. All rights reserved.</p>
         </div>
       </footer>
