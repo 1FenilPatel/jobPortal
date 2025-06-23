@@ -88,7 +88,7 @@ const Header = () => {
                       src={
                         isAdmin
                           ? "/admin_avatar.jpg"
-                          : MyprofilePhoto || "/user_avatar.png"
+                          : user?.profile?.profilePhoto || MyprofilePhoto || "/user_avatar.png"
                       }
                     />
                   </Avatar>
