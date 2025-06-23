@@ -86,14 +86,29 @@ const JobCard = ({ job }) => {
           More Details
         </Button>
         {user?.role === "user" && (
-          <Heart
-            onClick={handleSavedJob}
-            className={`cursor-pointer ml-3 transition-all duration-300 ease-in-out transform 
-    ${isSaved ? "text-red-500 scale-110" : "text-gray-400 scale-100"}`}
-            size={24}
-            stroke="red"
-            fill={isSaved ? "red" : "transparent"}
-          />
+          <div onClick={handleSavedJob} className="ml-3 cursor-pointer">
+            {isSaved ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="red"
+                viewBox="0 0 24 24"
+                stroke="red"
+                className="w-6 h-6 transition-all duration-300 scale-110"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M3.172 5.172a4 4 0 015.656 0L12 8.343l3.172-3.171a4 4 0 115.656 5.656L12 21 3.172 10.828a4 4 0 010-5.656z"
+                />
+              </svg>
+            ) : (
+              <Heart
+                className="w-6 h-6 text-gray-400 transition-all duration-300"
+                stroke="red"
+                strokeWidth={2}
+              />
+            )}
+          </div>
         )}
       </CardFooter>
     </Card>
