@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
-import { Heart, MapPinIcon } from "lucide-react";
+import { Heart as HeartIcon, MapPinIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
 import { useDispatch, useSelector } from "react-redux";
@@ -52,6 +52,7 @@ const JobCard = ({ job }) => {
           {job?.title}
         </CardTitle>
       </CardHeader>
+
       <CardContent className="flex flex-col gap-4 flex-1">
         <div className="flex justify-between items-center">
           <div className="flex gap-2 items-center text-sm sm:text-base">
@@ -63,8 +64,12 @@ const JobCard = ({ job }) => {
             className="w-10 sm:w-12 h-auto"
           />
         </div>
+
         <hr />
-        <p className="text-gray-600">{job?.description?.substring(0, 80)}...</p>
+        <p className="text-gray-600">
+          {job?.description?.substring(0, 80)}...
+        </p>
+
         <div className="flex flex-wrap gap-3">
           <Button variant="outline" className="text-sm px-3 py-2">
             {job?.position} Position
@@ -77,6 +82,7 @@ const JobCard = ({ job }) => {
           </Button>
         </div>
       </CardContent>
+
       <CardFooter className="flex justify-between items-center">
         <Button
           onClick={() => navigate(`/description/${job._id}`)}
@@ -85,6 +91,7 @@ const JobCard = ({ job }) => {
         >
           More Details
         </Button>
+
         {user?.role === "user" && (
           <div onClick={handleSavedJob} className="ml-3 cursor-pointer">
             {isSaved ? (
@@ -93,7 +100,7 @@ const JobCard = ({ job }) => {
                 fill="red"
                 viewBox="0 0 24 24"
                 stroke="red"
-                className="w-6 h-6 transition-all duration-300 scale-110"
+                className="w-6 h-6 transition-all duration-300 ease-in-out scale-110"
               >
                 <path
                   strokeLinecap="round"
@@ -102,8 +109,8 @@ const JobCard = ({ job }) => {
                 />
               </svg>
             ) : (
-              <Heart
-                className="w-6 h-6 text-gray-400 transition-all duration-300"
+              <HeartIcon
+                className="w-6 h-6 text-gray-400 transition-all duration-300 ease-in-out scale-100"
                 stroke="red"
                 strokeWidth={2}
               />
