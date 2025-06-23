@@ -16,6 +16,7 @@ import { useParams } from "react-router-dom";
 import { setIsApplied, setSingleJob } from "@/Redux/jobSlice";
 import { toast } from "sonner";
 import axiosInstance from "@/Utils/axiosInstance";
+import confetti from "canvas-confetti"; // ✅ Import the confetti library
 
 const ApplyJobDrawer = () => {
   const dispatch = useDispatch();
@@ -34,6 +35,17 @@ const ApplyJobDrawer = () => {
       dispatch(setIsApplied(hasApplied));
     }
   }, [singleJob, user, dispatch]);
+
+  const fireConfetti = () => {
+    // 🎉 Launch multiple confetti bursts
+    for (let i = 0; i < 5; i++) {
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 },
+      });
+    }
+  };
 
   const applyHandler = async () => {
     if (isApplied) {
@@ -54,6 +66,8 @@ const ApplyJobDrawer = () => {
         };
         dispatch(setSingleJob(updatedJob));
         toast.success(res.data.message);
+
+        fireConfetti(); // 🎉 Trigger confetti animation
       }
     } catch (error) {
       console.error(error);

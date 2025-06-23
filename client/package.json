@@ -21,6 +21,7 @@
     "@reduxjs/toolkit": "^2.5.0",
     "axios": "^1.7.9",
     "caniuse-lite": "^1.0.30001723",
+    "canvas-confetti": "^1.9.3",
     "class-variance-authority": "^0.7.1",
     "client": "file:",
     "clsx": "^2.1.1",

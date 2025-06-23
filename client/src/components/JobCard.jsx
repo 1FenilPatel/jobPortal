@@ -64,9 +64,7 @@ const JobCard = ({ job }) => {
           />
         </div>
         <hr />
-        <p className="text-gray-600">
-          {job?.description?.substring(0, 80)}...
-        </p>
+        <p className="text-gray-600">{job?.description?.substring(0, 80)}...</p>
         <div className="flex flex-wrap gap-3">
           <Button variant="outline" className="text-sm px-3 py-2">
             {job?.position} Position
@@ -90,10 +88,9 @@ const JobCard = ({ job }) => {
         {user?.role === "user" && (
           <Heart
             onClick={handleSavedJob}
-            className={`cursor-pointer ml-3 transition-all duration-300 ${
-              isSaved ? "text-red-500" : "text-gray-400"
-            }`}
-            size={22}
+            className={`cursor-pointer ml-3 transition-all duration-300 ease-in-out transform 
+    ${isSaved ? "text-red-500 scale-110" : "text-gray-400 scale-100"}`}
+            size={24}
             stroke="red"
             fill={isSaved ? "red" : "transparent"}
           />
