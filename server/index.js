@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended : true}));
 app.use(cookieParser());
 const corsOption ={
-    origin:'https://hired-lemon-nine.vercel.app/',
+    origin:'https://hired-lemon-nine.vercel.app',
     credentials:true
 }
 app.use(cors(corsOption));
