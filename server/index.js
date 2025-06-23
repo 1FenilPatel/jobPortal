@@ -14,7 +14,7 @@ dotenv.config();
 const app = express();
 
 // ✅ Final CORS setup — no trailing slash!
-const allowedOrigins = ['https://hired-lemon-nine.vercel.app'];
+const allowedOrigins = ['https://hired-flame.vercel.app'];
 
 app.use(
   cors({
