@@ -7,13 +7,11 @@ import {
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { store } from "@/Redux/store";
 import { Edit2, MoreHorizontal } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -27,54 +25,61 @@ const CompanyTable = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const filteredCompany =
-      allCompanies.length >= 0 &&
-      allCompanies.filter((company) => {
-        if (!searchCompayByText) {
-          return true;
-        }
-        return company?.name
-          ?.toLowerCase()
-          .includes(searchCompayByText.toLowerCase());
-      });
+    const filteredCompany = allCompanies.filter((company) => {
+      if (!searchCompayByText) return true;
+      return company?.name
+        ?.toLowerCase()
+        .includes(searchCompayByText.toLowerCase());
+    });
     setFilterCompany(filteredCompany);
   }, [allCompanies, searchCompayByText]);
+
   return (
-    <div>
-      <Table>
-        {/* <TableCaption>List of your recent registred companies</TableCaption> */}
+    <div className="overflow-x-auto w-full">
+      <Table className="min-w-[600px]">
         <TableHeader>
           <TableRow>
-            <TableHead className="text-xl">Logo</TableHead>
-            <TableHead className="text-xl">Name</TableHead>
-            <TableHead className="text-xl">Date</TableHead>
-            <TableHead className="text-xl">Job</TableHead>
-            <TableHead className="text-right text-xl">Action</TableHead>
+            <TableHead className="text-base sm:text-lg">Logo</TableHead>
+            <TableHead className="text-base sm:text-lg">Name</TableHead>
+            <TableHead className="text-base sm:text-lg">Date</TableHead>
+            <TableHead className="text-base sm:text-lg">Job</TableHead>
+            <TableHead className="text-right text-base sm:text-lg">Action</TableHead>
           </TableRow>
         </TableHeader>
+
         <TableBody>
           {filterCompany.map((company, index) => (
-            <tr key={index}>
+            <TableRow key={index} className="text-sm sm:text-base">
               <TableCell>
-                <Avatar className="w-16 h-16">
+                <Avatar className="w-12 h-12 sm:w-16 sm:h-16">
                   <AvatarImage
-                    className="cursor-pointer object-contain"
+                    className="object-contain"
                     src={company?.logo}
+                    alt={company?.name}
                   />
                 </Avatar>
               </TableCell>
+
               <TableCell>{company?.name}</TableCell>
-              <TableCell>{company.createdAt.split("T")[0]}</TableCell>
-              <TableCell className="text-blue-600"><a href="/admin/job">Post Job</a></TableCell>
-              <TableCell className="text-right cursor-pointer">
+              <TableCell>{company?.createdAt?.split("T")[0]}</TableCell>
+
+              <TableCell>
+                <a href="/admin/job" className="text-blue-600 hover:underline">
+                  Post Job
+                </a>
+              </TableCell>
+
+              <TableCell className="text-right">
                 <Popover>
-                  <PopoverTrigger>
+                  <PopoverTrigger className="focus:outline-none">
                     <MoreHorizontal />
                   </PopoverTrigger>
                   <PopoverContent className="w-32">
                     <div
-                      onClick={() => navigate(`/admin/companies/${company._id}`)}
-                      className="flex items-center gap-2 w-fit cursor-pointer"
+                      onClick={() =>
+                        navigate(`/admin/companies/${company._id}`)
+                      }
+                      className="flex items-center gap-2 cursor-pointer hover:text-blue-600 transition"
                     >
                       <Edit2 className="w-4" />
                       <span>Edit</span>
@@ -82,7 +87,7 @@ const CompanyTable = () => {
                   </PopoverContent>
                 </Popover>
               </TableCell>
-            </tr>
+            </TableRow>
           ))}
         </TableBody>
       </Table>

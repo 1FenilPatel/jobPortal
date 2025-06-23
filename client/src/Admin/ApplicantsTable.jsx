@@ -13,13 +13,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { store } from "@/Redux/store";
-import axiosInstance from "@/Utils/axiosInstance";
-import axios from "axios";
+import { useSelector } from "react-redux";
 import { MoreHorizontal } from "lucide-react";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
 import { toast } from "sonner";
+import axiosInstance from "@/Utils/axiosInstance";
 
 const ApplicantsTable = () => {
   const sortListingStatus = ["accepted", "rejected"];
@@ -27,14 +25,20 @@ const ApplicantsTable = () => {
   const [disabledButtons, setDisabledButtons] = useState({});
   const token = localStorage.getItem("token");
 
-  const statusHandler = async (status, id, phoneNumber, fullname, jobTitle,companyName) => {
+  const statusHandler = async (
+    status,
+    id,
+    phoneNumber,
+    fullname,
+    jobTitle,
+    companyName
+  ) => {
     try {
       setDisabledButtons((prev) => ({ ...prev, [id]: true }));
 
       const res = await axiosInstance.post(
         `${APPLICATION_API_END_POINT}/status/${id}/update`,
-        { status },
-        // { withCredentials: true }
+        { status }
       );
 
       if (res.data.success) {
@@ -46,15 +50,14 @@ const ApplicantsTable = () => {
             phoneNumber,
             message:
               status === "accepted"
-               ? `Dear ${fullname}, congratulations! 🎉 You have been ACCEPTED for the ${jobTitle} role at ${companyName}! Welcome aboard!`
-               : `Dear ${fullname}, thank you for applying for the ${jobTitle} role at ${companyName}. Unfortunately, we couldn't proceed this time. Wishing you success ahead!`
+                ? `Dear ${fullname}, congratulations! 🎉 You have been ACCEPTED for the ${jobTitle} role at ${companyName}!`
+                : `Dear ${fullname}, thank you for applying for the ${jobTitle} role at ${companyName}. Unfortunately, we couldn't proceed this time.`,
           },
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          },
-          // { withCredentials: true }
+          }
         );
         console.log("SMS Notification Sent");
       }
@@ -66,8 +69,8 @@ const ApplicantsTable = () => {
   };
 
   return (
-    <div>
-      <Table>
+    <div className="overflow-x-auto w-full">
+      <Table className="min-w-[900px]">
         <TableHeader>
           <TableRow>
             <TableHead>Fullname</TableHead>
@@ -82,12 +85,16 @@ const ApplicantsTable = () => {
         </TableHeader>
         <TableBody>
           {applicants?.applications?.map((application) => {
-            console.log(application);
-
             const { applicant, _id, status } = application;
             const jobTitle = application?.job?.title || "N/A";
             const companyName = application?.job?.company?.name || "N/A";
-            const { fullname, email, phoneNumber, profile, createdAt } = applicant || {};
+            const {
+              fullname,
+              email,
+              phoneNumber,
+              profile,
+              createdAt,
+            } = applicant || {};
             const resumeLink = profile?.resume;
             const resumeName = profile?.resumeOriginalName || "Resume";
             const formattedDate = createdAt?.split("T")[0] || "NA";
@@ -102,43 +109,44 @@ const ApplicantsTable = () => {
                 <TableCell>
                   {resumeLink ? (
                     <a
-                      className="text-blue-900"
+                      className="text-blue-900 underline"
                       href={resumeLink}
                       target="_blank"
-                      aria-label="View Resume"
+                      rel="noopener noreferrer"
                     >
                       {resumeName}
                     </a>
                   ) : (
-                    <span>NA</span>
+                    <span>N/A</span>
                   )}
                 </TableCell>
-                <TableCell>{status}</TableCell>
+                <TableCell className="capitalize">{status}</TableCell>
                 <TableCell>{formattedDate}</TableCell>
                 <TableCell className="text-right">
                   <Popover>
                     <PopoverTrigger aria-label="Open action menu">
                       <MoreHorizontal />
                     </PopoverTrigger>
-                    <PopoverContent className="w-40 flex gap-2 flex-col mr-24">
+                    <PopoverContent className="w-40 flex flex-col gap-2">
                       {sortListingStatus.map((statusOption) => (
-                        <div
+                        <Button
                           key={statusOption}
-                          onClick={
-                            !isDisabled && !disabledButtons[_id]
-                              ? () => statusHandler(statusOption, _id, phoneNumber, fullname, jobTitle,companyName)
-                              : null
+                          variant="outline"
+                          disabled={isDisabled || disabledButtons[_id]}
+                          onClick={() =>
+                            statusHandler(
+                              statusOption,
+                              _id,
+                              phoneNumber,
+                              fullname,
+                              jobTitle,
+                              companyName
+                            )
                           }
-                          className={`cursor-pointer my-1 flex items-center ${
-                            (isDisabled || disabledButtons[_id]) && "opacity-50 pointer-events-none"
-                          }`}
-                          aria-disabled={isDisabled || disabledButtons[_id]}
-                          aria-label={`Set status to ${statusOption}`}
+                          className="text-sm"
                         >
-                          <Button className="w-48 " variant="outline">
-                            {statusOption}
-                          </Button>
-                        </div>
+                          {statusOption}
+                        </Button>
                       ))}
                     </PopoverContent>
                   </Popover>
