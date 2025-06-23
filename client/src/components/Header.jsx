@@ -26,6 +26,12 @@ const Header = () => {
     console.log("User changed:", user);
   }, [user]);
 
+  const getLink = ()=>{
+    if(!user) return "/";
+    if(user?.role === "admin") return "/superadmin-dashboard";
+    if(user?.role === "provider" && user?.isApproved == true) return "/admin/companies";
+  }
+
   const handleLogout = async () => {
     try {
       const res = await axiosInstance.get(`${USER_API_END_POINT}/logout`, {
@@ -52,7 +58,7 @@ const Header = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <Link to={isAdmin ? "/admin/companies" : "/"}>
+        <Link to={getLink()}>
           <motion.img
             src="/logo.png"
             className="h-20"
