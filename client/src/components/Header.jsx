@@ -9,7 +9,7 @@ import { store } from "@/Redux/store";
 import axios from "axios";
 import { USER_API_END_POINT } from "./Apis";
 import { toast } from "sonner";
-import { clearUser } from "@/Redux/authSlice";
+import { clearUser, setProfilePhoto } from "@/Redux/authSlice";
 import { persistStore } from "redux-persist";
 import { motion } from "framer-motion";
 import { clearSavedJobs } from "@/Redux/savedJobSlice";
@@ -39,6 +39,7 @@ const Header = () => {
       });
       if (res.data.success) {
         dispatch(clearUser());
+        dispatch(setProfilePhoto(""));
         dispatch(clearSavedJobs());
         localStorage.removeItem("token");
         toast.success(res.data.message);

@@ -70,7 +70,7 @@ const Profile = () => {
           <motion.div className="flex items-center gap-6" variants={fadeIn}>
             <Avatar className="h-28 w-28 shadow-lg">
               <AvatarImage
-                src={MyprofilePhoto || "/user_avatar.png"}
+                src={user?.profile?.profilePhoto || MyprofilePhoto || "/user_avatar.png"}
                 alt="Profile"
               />
             </Avatar>

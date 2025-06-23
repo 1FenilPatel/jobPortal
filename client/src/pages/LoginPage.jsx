@@ -8,7 +8,7 @@ import axios from "axios";
 import { ADMIN_API_END_POINT, USER_API_END_POINT } from "@/components/Apis";
 import { toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
-import { setLoading, setUser } from "@/Redux/authSlice";
+import { setLoading, setProfilePhoto, setUser } from "@/Redux/authSlice";
 import { Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import axiosInstance from "@/Utils/axiosInstance";
@@ -72,6 +72,7 @@ const LoginPage = () => {
       if (res.data.success) {
         toast.success(res.data.message);
         dispatch(setUser(res.data.newUser));
+        dispatch(setProfilePhoto(res.data.user?.profile?.profilePhoto || ""));
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("role", res.data.newUser.role);
         navigate("/");
